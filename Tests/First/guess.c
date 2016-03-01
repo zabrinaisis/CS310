@@ -23,7 +23,7 @@ int main (int argc, char *argv[]) {
     int range = argMax - argMin;
     int guess = -1;
     int count = 0;
-    int r = ((rand() % argMin) + argMin);
+    int r = ((rand() % (range+1)) + argMin);
     while (r != guess) {
         printf("Guess a number between, and including %d and %d: ", argMin, argMax);
         scanf("%d", &guess);
