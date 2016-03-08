@@ -1,19 +1,17 @@
 #include <stdio.h>
 
-int sum(int argc, char *argv[]) {
-    double input;
+int lowercase(char *s) {
     int i;
-    for (i = 1; i < argc; i++) {
-        char *j = argv[i];
-        while (*j != -1) {
-            input++;
+    char *c;
+    for(i = 0; s[i] != '\0'; i++) {
+        int convert = tolower(c);
 
-        }
     }
-    return input;
 }
 
-int main(int argc, char *argv[]) {
-    double result = sum(argc, argv);
-    printf("sum is: %f\n", result);
+int main() {
+    char *string;
+    printf("Please write some text: ");
+    scanf("%s", string);
+    printf("%s", lowercase(string));
 }
