@@ -15,6 +15,7 @@ int main() {
     int child = fork();
 
     if (child == 0) {
+        //sleep(30);
         close(pipeAB[1]);           // B can only read from this pipe
         close(pipeBA[0]);           // B can only write to this pipe
         
@@ -26,23 +27,24 @@ int main() {
         dup2(pipeBA[1], 1);         // B's stdout now goes to outgoing pipe
         close(pipeBA[1]);           // close outgoing pipe (alternate opening now)
 
-        printf("In Child");
-        read(0, &buf, 6);
+        //printf("In Child");
+        read(0, buf, 6);
 
-        char* tok = strtok(buf, " ");
-        printf("tok is %c\n", *tok);
-        num1 = atoi(&tok[0]);
-        printf("num1 is %d\n", num1);
-        tok = strtok(NULL, " ");
-        printf("tok is %c\n", *tok);
-        tok = strtok(NULL, " ");
-        printf("tok is %c\n", *tok);
-        num2 = atoi(&tok[3]);
-        printf("num2 is %d\n", num2);
+        sscanf(buf, "%d %*c %d", &num1, &num2); 
+        //char* tok = strtok(buf, " ");
+        //printf("tok is %c\n", *tok);
+        //num1 = atoi(&tok[1]);
+        //printf("num1 is %d\n", num1);
+        //tok = strtok(NULL, " ");
+        //printf("tok is %c\n", *tok);
+        //tok = strtok(NULL, " ");
+        //printf("tok is %c\n", *tok);
+        //num2 = atoi(&tok[3]);
+        //printf("num2 is %d\n", num2);
         ans = num1 + num2;
-        printf("ans is %d\n", ans);
+        //printf("ans is %d\n", ans);
 
-        write(1, &buf, ans);
+        write(1, &ans, sizeof(ans));
         
         close(1); // close stdout, sends EOF signal along pipeBC
         close(0);
@@ -67,13 +69,14 @@ int main() {
 
     char* out = "4 + 8";
     int in = 0;
-    write(1, &out, 6);
-    read(0, &in, 1);
+    write(1, out, 6);
+    read(0, &in, sizeof(in));
     fprintf(stderr, "Wrote: %s Calculated: %d\n", out, in); // write to stdout!!!
 
     // close the pipe will cause children to quit
     close(pipeAB[1]); // this causes B to read 0
     close(pipeBA[0]); // A no longer wants to read
+    return 0;
 }
 
 // NEEDS TO HAVE THE PARENT READ A WHOLE STRING INPUT AND CHILD TOKENIZES.
